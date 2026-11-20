@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0c18">
+  <meta name="description" content="Offline-friendly color picker for ASUS TUF RGB keyboards on Linux. Click a swatch to copy a temporary sysfs command.">
+  <title>TUF RGB Palette · Choose your glow</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0a0c18;--panel:#141829;--panel2:#191e34;--line:#2a2f47;--text:#f5f5fe;--muted:#a6abc4;--accent:#00d3b8;--focus:#fff;--shadow:0 22px 70px rgba(0,0,0,.24)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(80,61,161,.24),transparent 45%),radial-gradient(ellipse at 5% 29%,rgba(0,211,184,.09),transparent 42%),var(--bg);font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}
+    button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:3px}a{color:#a4f1e9;text-decoration:none}a:hover{text-decoration:underline}
+    .container{width:min(1140px,calc(100% - 40px));margin:0 auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:26px 0}.brand{display:inline-flex;align-items:center;gap:12px;color:var(--text);font-weight:850;letter-spacing:.04em}.logo{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#16e1c5,#a68cff);color:#0a0c18;font-size:20px;font-weight:900;box-shadow:0 0 24px rgba(22,225,197,.22)}.toplinks{display:flex;gap:18px;align-items:center}.toplinks a{color:var(--muted);font-size:13px}
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:36px;padding:54px 0 46px}.eyebrow{display:inline-flex;gap:7px;align-items:center;letter-spacing:.13em;font-size:11px;font-weight:800;text-transform:uppercase;color:#8de7df}.eyebrow:before{content:"";width:7px;height:7px;background:#2ee2c4;box-shadow:0 0 10px #2ee2c4;border-radius:50%}h1{font-size:clamp(38px,5.3vw,69px);line-height:1.09;letter-spacing:-.055em;margin:18px 0 18px;font-weight:850}h1 span{background:linear-gradient(92deg,#7cfce3,#b5a1ff,#fc9cda);color:transparent;background-clip:text}.hero p{color:var(--muted);font-size:16px;max-width:530px;line-height:1.8;margin:0 0 22px}.tags{display:flex;flex-wrap:wrap;gap:8px}.tag{border:1px solid #333b55;background:rgba(30,35,58,.65);border-radius:20px;padding:6px 11px;font-size:12px;color:#c7cbe1}.hero-visual{position:relative;isolation:isolate;min-height:250px;display:grid;place-items:center}.aura{position:absolute;inset:13%;border-radius:45%;background:var(--accent);filter:blur(82px);opacity:.25;z-index:-1;transition:background .2s}.keyboard{width:100%;padding:20px 18px 22px;background:linear-gradient(145deg,#2a3044,#141727 70%);border:1px solid #3b415a;border-radius:18px;box-shadow:0 22px 50px #03050caa,0 3px 0 #080a12;transform:perspective(850px) rotateX(13deg) rotateZ(-5deg)}.key-row{display:flex;gap:5px;margin-bottom:6px}.key{height:26px;flex:1;border-radius:5px;border:1px solid rgba(255,255,255,.09);background:#15192b;color:var(--accent);font-size:10px;text-align:center;display:grid;place-items:center;box-shadow:inset 0 -2px 0 #070914,0 0 12px -1px var(--accent);transition:color .2s,box-shadow .2s}.key.wide{flex:1.5}.key.space{flex:5}.key-row:last-child{margin-bottom:0}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0 18px}.section-title{font-size:23px;letter-spacing:-.03em;font-weight:800;margin:0}.sub{color:var(--muted);font-size:13px;margin:2px 0 0}.search{border:1px solid var(--line);border-radius:13px;background:rgba(21,25,43,.84);padding:12px 15px;color:var(--text);width:min(100%,275px)}.filters{display:flex;gap:8px;overflow:auto;scrollbar-width:none;padding:1px 0 17px}.filters::-webkit-scrollbar{display:none}.filter{flex-shrink:0;background:#15192b;border:1px solid var(--line);border-radius:999px;color:var(--muted);padding:8px 16px;font-size:12px}.filter[aria-pressed=true]{color:#071b1a;background:#8df3e3;border-color:#8df3e3;font-weight:800}
+    .palette{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.swatch{display:flex;flex-direction:column;text-align:left;border:1px solid #2c304a;border-radius:15px;background:linear-gradient(180deg,#1b2035,#13172a);padding:10px;color:var(--text);min-width:0;transition:transform .15s,border-color .15s,box-shadow .15s}.swatch:hover{transform:translateY(-4px);border-color:#6a7395;box-shadow:var(--shadow)}.swatch.selected{border-color:#9ceee5;box-shadow:0 0 0 1px #9ceee5 inset}.swatch-color{height:92px;width:100%;display:flex;justify-content:flex-end;align-items:flex-start;border-radius:9px;padding:9px;border:1px solid rgba(255,255,255,.13)}.check{font-size:11px;padding:4px 8px;border-radius:99px;background:rgba(0,0,0,.4);color:white}.swatch-meta{display:flex;justify-content:space-between;align-items:center;gap:5px;margin-top:11px}.swatch-name{font-weight:750;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.swatch-hex{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}.empty{grid-column:1/-1;padding:35px;text-align:center;color:var(--muted)}
+    .workbench{display:grid;grid-template-columns:minmax(0,.83fr) minmax(0,1.17fr);gap:18px;margin:38px 0 60px}.panel{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#1b2036,#101424);padding:23px;min-width:0}.panel h2{margin:0;font-size:20px;letter-spacing:-.025em}.panel p{color:var(--muted);font-size:13px;line-height:1.7}.custom{display:flex;align-items:center;gap:12px;margin:20px 0}.pick{width:66px;height:62px;border:1px solid #545a75;border-radius:12px;padding:4px;background:#252b40;cursor:pointer}.hex-input{width:130px;max-width:100%;background:#0c1020;color:#fff;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-family:ui-monospace,monospace;text-transform:uppercase}.rgb-note{font-size:12px;color:var(--muted)}.btn{background:linear-gradient(100deg,#57e8d2,#96c7ff);border:0;color:#0b1623;border-radius:11px;padding:11px 15px;font-size:13px;font-weight:850;min-height:44px}.btn:hover{filter:brightness(1.08)}.btn.secondary{background:#242a43;color:#f4f3ff;border:1px solid #424964}.button-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.detail-head{display:flex;align-items:center;gap:11px;margin:17px 0}.dot{height:36px;width:36px;border-radius:10px;background:var(--accent);box-shadow:0 0 24px -5px var(--accent);border:1px solid #ffffff25}.detail-name{font-size:17px;font-weight:780}.detail-hex{font-size:12px;color:var(--muted)}.code{margin:16px 0 0;background:#080b16;border:1px solid #333951;border-radius:12px;padding:16px;color:#c8f7eb;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7;font:12px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;user-select:all}.hint{margin:10px 0 0!important;font-size:12px!important}.note{margin:0 0 44px;padding:18px;border-radius:14px;border:1px solid #35334e;background:#201d31;color:#bec2d6;font-size:13px;line-height:1.7}.note strong{color:#eee9ff}.note code{overflow-wrap:anywhere;word-break:break-word}.foot{border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:23px 0 35px;color:var(--muted);font-size:12px}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,130px);z-index:10;background:#d5fff4;color:#0b2926;border-radius:12px;padding:11px 20px;font-size:13px;font-weight:800;box-shadow:var(--shadow);transition:transform .2s}.toast.visible{transform:translate(-50%,0)}
+    dialog{background:#171c30;color:#fff;border:1px solid #525976;border-radius:16px;max-width:min(95vw,560px);box-shadow:var(--shadow)}dialog::backdrop{background:#030511ad}dialog textarea{display:block;background:#070a17;color:#e2fff5;border:1px solid #353c58;width:100%;min-height:110px;padding:12px;border-radius:8px;font:12px/1.6 ui-monospace,monospace;resize:vertical}dialog p{color:#b4bad4;font-size:14px}
+    @media(max-width:850px){.hero{grid-template-columns:1fr;padding-top:22px}.hero-visual{max-width:520px;margin:auto;width:100%;min-height:200px}.palette{grid-template-columns:repeat(3,minmax(0,1fr))}.workbench{grid-template-columns:1fr}}
+    @media(max-width:540px){.container{width:min(100% - 28px,1140px)}.toplinks{gap:12px}.toplinks a{font-size:11px}h1{font-size:41px}.hero p{font-size:14px}.toolbar{align-items:stretch;flex-direction:column}.search{width:100%;max-width:none}.palette{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.swatch-color{height:75px}.swatch{padding:8px}.swatch-meta{align-items:flex-start;flex-direction:column;gap:1px}.panel{padding:17px}.workbench{gap:13px}.keyboard{padding:14px}.key{height:21px;font-size:9px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="topbar"><div class="brand"><div class="logo" aria-hidden="true">T</div><span>TUF / RGB PALETTE</span></div><nav class="toplinks"><a href="#colors">Colors</a><a href="#custom">Custom</a><a href="https://github.com/fatemeh-mohseni-AI/tuf-rgb-palette" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></header>
+    <main>
+      <section class="hero" aria-labelledby="hero-heading"><div><div class="eyebrow">LINUX · ASUS TUF</div><h1 id="hero-heading">Make your keyboard <span>glow your way.</span></h1><p>Pick a color. Copy a command. Paste it into your terminal. No app, no dependencies, no permanent firmware changes.</p><div class="tags"><span class="tag">✦ 32 curated colors</span><span class="tag">✦ Offline-friendly</span><span class="tag">✦ Temporary RGB</span></div></div><div class="hero-visual" aria-hidden="true"><div class="aura"></div><div class="keyboard" id="keyboard"><div class="key-row"><span class="key">Esc</span><span class="key">F1</span><span class="key">F2</span><span class="key">F3</span><span class="key">F4</span><span class="key">F5</span><span class="key">F6</span><span class="key">F7</span><span class="key">F8</span><span class="key">F9</span><span class="key">F10</span><span class="key">F11</span></div><div class="key-row"><span class="key">~</span><span class="key">1</span><span class="key">2</span><span class="key">3</span><span class="key">4</span><span class="key">5</span><span class="key">6</span><span class="key">7</span><span class="key">8</span><span class="key">9</span><span class="key">0</span><span class="key wide">⌫</span></div><div class="key-row"><span class="key wide">Tab</span><span class="key">Q</span><span class="key">W</span><span class="key">E</span><span class="key">R</span><span class="key">T</span><span class="key">Y</span><span class="key">U</span><span class="key">I</span><span class="key">O</span><span class="key">P</span><span class="key">[</span></div><div class="key-row"><span class="key wide">Caps</span><span class="key">A</span><span class="key">S</span><span class="key">D</span><span class="key">F</span><span class="key">G</span><span class="key">H</span><span class="key">J</span><span class="key">K</span><span class="key">L</span><span class="key wide">Enter</span></div><div class="key-row"><span class="key wide">Shift</span><span class="key">Z</span><span class="key">X</span><span class="key">C</span><span class="key">V</span><span class="key">B</span><span class="key">N</span><span class="key">M</span><span class="key">,</span><span class="key">.</span><span class="key wide">Shift</span></div><div class="key-row"><span class="key">Ctrl</span><span class="key">Fn</span><span class="key">Alt</span><span class="key space"></span><span class="key">Alt</span><span class="key">Menu</span><span class="key">Ctrl</span></div></div></div></section>
+      <section id="colors" aria-labelledby="colors-heading"><div class="toolbar"><div><h2 class="section-title" id="colors-heading">Find your shade <span id="count" class="sub"></span></h2><p class="sub">Click any color to copy its complete Linux terminal command.</p></div><input class="search" type="search" id="search" placeholder="Search colors or HEX…" aria-label="Search colors or HEX" autocomplete="off"></div><div class="filters" id="filters" role="group" aria-label="Filter by color category"></div><div class="palette" id="palette"></div></section>
+      <section class="workbench" aria-label="Custom color and command"><div class="panel" id="custom"><h2>Mix your own color</h2><p>Need a very specific shade? Choose any HEX color. The RGB command updates instantly.</p><div class="custom"><input type="color" class="pick" id="color-picker" value="#00d3b8" aria-label="Pick custom RGB color"><input class="hex-input" id="hex-input" type="text" inputmode="text" maxlength="7" value="#00D3B8" spellcheck="false" aria-label="Custom HEX code"></div><div class="rgb-note" id="rgb-note">RGB (0, 211, 184)</div><div class="button-row"><button type="button" class="btn" id="copy-custom">Copy custom command ↗</button></div></div><div class="panel"><h2>Your command</h2><p>Current selection. The first <code>0</code> means apply temporarily — not save to firmware.</p><div class="detail-head"><span class="dot" id="current-dot"></span><div><div class="detail-name" id="current-name">Mint</div><div class="detail-hex" id="current-hex">#00D3B8 · kb-mint</div></div></div><pre class="code" id="command" aria-label="Terminal command"></pre><div class="button-row"><button type="button" class="btn" id="copy-command">Copy terminal command</button><button type="button" class="btn secondary" id="copy-alias">Copy Zsh alias</button></div><p class="hint" id="alias-hint">Alias requires loading <code>keyboard-colors.zsh</code> first.</p></div></section>
+      <aside class="note"><strong>Before you paste:</strong> This uses <code>/sys/class/leds/asus::kbd_backlight/kbd_rgb_mode</code>. Check that the file exists on your laptop. Paste the copied command into your Linux terminal (it may ask for your sudo password). These commands do <strong>not</strong> persist across reboots. The color picker does not control hardware directly. Black/off may behave differently on some models.</aside>
+    </main><footer class="foot"><span>Made for ASUS TUF on Linux · No trackers, frameworks, or network requests.</span><span><a href="https://github.com/fatemeh-mohseni-AI/tuf-rgb-palette" target="_blank" rel="noopener noreferrer">View source ↗</a></span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="copy-dialog" aria-labelledby="copy-dialog-title"><h2 id="copy-dialog-title">Copy the command manually</h2><p>Clipboard access isn't available in this browser. Select the text below and copy it with Ctrl+C (or Cmd+C).</p><textarea id="manual-text" readonly aria-label="Text to copy"></textarea><div class="button-row"><button type="button" class="btn secondary" id="close-dialog">Close</button></div></dialog>
+  <script>
+  'use strict';
+  // Mirrors keyboard-colors.zsh. Keep values in sync when adding swatches.
+  const COLORS = [{"name":"Red","alias":"red","hex":"#FF0000","category":"Warm"},{"name":"Crimson","alias":"crimson","hex":"#DC143C","category":"Warm"},{"name":"Coral","alias":"coral","hex":"#FF6450","category":"Warm"},{"name":"Orange","alias":"orange","hex":"#FF8200","category":"Warm"},{"name":"Amber","alias":"amber","hex":"#FFBF00","category":"Warm"},{"name":"Gold","alias":"gold","hex":"#FFB400","category":"Warm"},{"name":"Yellow","alias":"yellow","hex":"#FFFF00","category":"Warm"},{"name":"Lime","alias":"lime","hex":"#AAFF00","category":"Green"},{"name":"Green","alias":"green","hex":"#00FF00","category":"Green"},{"name":"Emerald","alias":"emerald","hex":"#00C878","category":"Green"},{"name":"Mint","alias":"mint","hex":"#00D3B8","category":"Green"},{"name":"Teal","alias":"teal","hex":"#008080","category":"Green"},{"name":"Turquoise","alias":"turquoise","hex":"#30D5C8","category":"Green"},{"name":"Cyan","alias":"cyan","hex":"#00FFFF","category":"Blue"},{"name":"Ice","alias":"ice","hex":"#A0DCFF","category":"Blue"},{"name":"Sky","alias":"sky","hex":"#50A0FF","category":"Blue"},{"name":"Blue","alias":"blue","hex":"#0050FF","category":"Blue"},{"name":"Royal Blue","alias":"royal","hex":"#4169E1","category":"Blue"},{"name":"Navy","alias":"navy","hex":"#000080","category":"Blue"},{"name":"Lavender","alias":"lavender","hex":"#B482FF","category":"Purple"},{"name":"Purple","alias":"purple","hex":"#A032FF","category":"Purple"},{"name":"Violet","alias":"violet","hex":"#8000FF","category":"Purple"},{"name":"Magenta","alias":"magenta","hex":"#FF00FF","category":"Purple"},{"name":"Fuchsia","alias":"fuchsia","hex":"#FF00AA","category":"Purple"},{"name":"Pink","alias":"pink","hex":"#FF64B4","category":"Pink"},{"name":"Hot Pink","alias":"hotpink","hex":"#FF1493","category":"Pink"},{"name":"Rose","alias":"rose","hex":"#FF4682","category":"Pink"},{"name":"Peach","alias":"peach","hex":"#FFB48C","category":"Pink"},{"name":"White","alias":"white","hex":"#FFFFFF","category":"Neutral"},{"name":"Warm White","alias":"warmwhite","hex":"#FFE0B9","category":"Neutral"},{"name":"Cream","alias":"cream","hex":"#FFF3D0","category":"Neutral"},{"name":"Black / Off","alias":"off","hex":"#000000","category":"Neutral"}];
+  const FILE = '/sys/class/leds/asus::kbd_backlight/kbd_rgb_mode';
+  const CATEGORIES = ['All', 'Warm', 'Green', 'Blue', 'Purple', 'Pink', 'Neutral'];
+  const $ = id => document.getElementById(id);
+  const hexToRgb = hex => [1,3,5].map(i => Number.parseInt(hex.slice(i,i+2),16));
+  const makeCommand = hex => `printf '0 0 ${hexToRgb(hex).join(' ')} 0\\n' | sudo tee ${FILE}`;
+  // The backslash sequence above must be literal \n in the copied shell command.
+  let selected = COLORS.find(c => c.alias === 'mint');
+  let activeCategory = 'All';
+  let toastTimeout;
+  function activate(color) {
+    selected = color;
+    document.documentElement.style.setProperty('--accent', color.hex);
+    $('current-name').textContent = color.name;
+    $('current-hex').textContent = `${color.hex} · ${color.alias ? 'kb-' + color.alias : 'custom RGB'}`;
+    $('current-dot').style.background = color.hex;
+    $('command').textContent = makeCommand(color.hex);
+    $('copy-alias').disabled = !color.alias;
+    $('copy-alias').hidden = !color.alias;
+    $('alias-hint').hidden = !color.alias;
+    document.querySelectorAll('.swatch').forEach(el => {
+      const on = el.dataset.alias === color.alias && Boolean(color.alias);
+      el.classList.toggle('selected', on);
+      el.setAttribute('aria-pressed', String(on));
+    });
+  }
+  function showToast(message) {
+    const t=$('toast');t.textContent=message;t.classList.add('visible');
+    clearTimeout(toastTimeout);toastTimeout=setTimeout(() => t.classList.remove('visible'),2300);
+  }
+  async function copyText(value) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+        showToast('✓ Copied to clipboard');
+        return;
+      }
+    } catch (_) { /* Try local-file fallback. */ }
+    const ta=document.createElement('textarea');
+    ta.value=value;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    let success=false;
+    try { success=document.execCommand('copy'); } catch (_) { /* Show manual fallback. */ }
+    ta.remove();
+    if (success) { showToast('✓ Copied to clipboard');return; }
+    $('manual-text').value=value;
+    const dialog=$('copy-dialog');
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else window.prompt('Copy this text:',value);
+    $('manual-text').focus();$('manual-text').select();
+  }
+  function renderFilters(){
+    const el=$('filters');
+    CATEGORIES.forEach(cat => {
+      const b=document.createElement('button');b.type='button';b.className='filter';b.textContent=cat;
+      b.setAttribute('aria-pressed',String(cat===activeCategory));
+      b.addEventListener('click',()=>{activeCategory=cat;renderFiltersState();renderPalette();});el.append(b);
+    });
+  }
+  function renderFiltersState(){document.querySelectorAll('.filter').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.textContent===activeCategory)));}
+  function renderPalette(){
+    const q=$('search').value.trim().toLowerCase();
+    const items=COLORS.filter(c=>(activeCategory==='All'||c.category===activeCategory) && `${c.name} ${c.hex} ${c.alias} ${c.category}`.toLowerCase().includes(q));
+    const wrap=$('palette');wrap.replaceChildren();$('count').textContent=`· ${items.length} colors`;
+    if (!items.length){const p=document.createElement('p');p.className='empty';p.textContent='No matching shades. Try another search.';wrap.append(p);return;}
+    const fragment=document.createDocumentFragment();
+    items.forEach(c=>{
+      const button=document.createElement('button');button.className='swatch';button.type='button';button.dataset.alias=c.alias;
+      button.setAttribute('aria-label',`${c.name}, ${c.hex}. Click to copy Linux command`);
+      const bar=document.createElement('div');bar.className='swatch-color';bar.style.background=c.hex;
+      const meta=document.createElement('div');meta.className='swatch-meta';
+      const name=document.createElement('span');name.className='swatch-name';name.textContent=c.name;
+      const hex=document.createElement('span');hex.className='swatch-hex';hex.textContent=c.hex;
+      meta.append(name,hex);button.append(bar,meta);
+      button.addEventListener('click',()=>{activate(c);void copyText(makeCommand(c.hex));});
+      fragment.append(button);
+    });wrap.append(fragment);activate(selected);
+  }
+  function updateCustomFromHex(hex) {
+    const valid=/^#[0-9a-fA-F]{6}$/.test(hex);
+    $('hex-input').setCustomValidity(valid?'':'Use a 6-digit HEX color, such as #00D3B8');
+    if (!valid) return;
+    const normalized=hex.toUpperCase();$('color-picker').value=normalized;
+    $('rgb-note').textContent=`RGB (${hexToRgb(normalized).join(', ')})`;
+    activate({name:'Custom Color',hex:normalized,alias:null});
+  }
+  $('search').addEventListener('input',renderPalette);
+  $('color-picker').addEventListener('input',e=>{$('hex-input').value=e.target.value.toUpperCase();updateCustomFromHex(e.target.value);});
+  $('hex-input').addEventListener('input',e=>updateCustomFromHex(e.target.value));
+  $('copy-custom').addEventListener('click',()=>{
+    const hex=$('hex-input').value.trim();
+    if (!/^#[0-9a-fA-F]{6}$/.test(hex)){$('hex-input').reportValidity();return;}
+    updateCustomFromHex(hex);void copyText(makeCommand(hex));
+  });
+  $('copy-command').addEventListener('click',()=>void copyText(makeCommand(selected.hex)));
+  $('copy-alias').addEventListener('click',()=>{if(selected.alias) void copyText('kb-'+selected.alias);});
+  $('close-dialog').addEventListener('click',()=>{$('copy-dialog').close();});
+  renderFilters();renderPalette();
+  </script>
+</body>
+</html>
