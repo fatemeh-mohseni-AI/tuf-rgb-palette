@@ -1,24 +1,60 @@
-# 🎨 TUF RGB Palette
+<p align="center">
+  <img src="assets/hero.svg" alt="TUF RGB Palette — a glowing RGB keyboard on a dark background" width="100%" />
+</p>
 
-**Pick a color. Copy a command. Change your ASUS TUF keyboard glow on Linux.**
+<h3 align="center">Choose your glow. One click, one command. ✨</h3>
 
-A lightweight, self-contained, offline-friendly color palette for ASUS TUF laptops exposing the Linux `asus-wmi` keyboard RGB sysfs interface. Includes **32 curated colors**, a **custom HEX picker**, and ready-to-source **Zsh aliases**.
+<p align="center">
+  A tiny, beautiful, offline-friendly RGB color picker for ASUS TUF keyboards on Linux.<br />
+  <strong>32 colors · Custom HEX picker · Zsh aliases · No dependencies · No firmware saving</strong>
+</p>
 
-> **Designed around:** ASUS TUF Gaming F15 FX507ZM, Ubuntu 22.04, kernel 6.8. Other devices might work if they expose the same sysfs interface. This repository does not install drivers or guarantee compatibility with other models.
+<p align="center">
+  <a href="https://fatemeh-mohseni-ai.github.io/tuf-rgb-palette/"><img alt="Open live palette" src="https://img.shields.io/badge/OPEN_LIVE_PALETTE-00d3b8?style=for-the-badge&labelColor=161a2d" /></a>
+  <a href="https://github.com/fatemeh-mohseni-AI/tuf-rgb-palette/blob/main/keyboard-colors.zsh"><img alt="Zsh aliases" src="https://img.shields.io/badge/ZSH_ALIASES-b5a1ff?style=for-the-badge&labelColor=161a2d" /></a>
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/LICENSE-MIT-fc9cda?style=for-the-badge&labelColor=161a2d" /></a>
+</p>
 
-## ✨ Features
+<p align="center">
+  <a href="https://fatemeh-mohseni-ai.github.io/tuf-rgb-palette/"><strong>🌈 Try the web app</strong></a>
+  &nbsp;·&nbsp;
+  <a href="#-quick-start"><strong>⚡ Quick start</strong></a>
+  &nbsp;·&nbsp;
+  <a href="#-color-collection"><strong>🎨 Browse colors</strong></a>
+</p>
 
-- 🌈 Click any color swatch to copy its **full terminal command**.
-- 🎨 Pick any custom HEX color and automatically generate RGB values.
-- 🔎 Search and filter shades by name, category, HEX code, or alias.
-- ⌨️ Copy a short `kb-*` alias after installing the Zsh helpers.
-- 📴 Works offline; `index.html` requires **no build, dependencies, or external assets**.
-- 🔒 No analytics or network requests required for the color picker.
-- 💾 **Temporary changes by default** — does *not* write a persistent firmware color.
+---
 
-## 🚀 Use the color picker
+## 💡 What is TUF RGB Palette?
 
-Download or clone the repository, then open `index.html` in a browser. Click any swatch and paste the copied command into a Linux terminal. The browser copies the command; **it does not directly control your keyboard**.
+A lightweight color palette that turns a colorful swatch into a **ready-to-paste Linux terminal command**. No Armoury Crate, daemon, or extra RGB driver installation is required **when your laptop already exposes the compatible kernel interface**.
+
+Built around an **ASUS TUF Gaming F15 FX507ZM** running **Ubuntu 22.04 with Linux kernel 6.8**. It may work on other ASUS TUF devices with the same `asus-wmi` sysfs interface; those models are not verified here.
+
+> [!IMPORTANT]
+> The website **only copies commands to your clipboard**; it cannot directly control your keyboard. Run the copied command on a compatible Linux machine. Every provided command uses the **temporary** setting, not the firmware-save setting.
+
+## ✨ Highlights
+
+| | Feature | What it does |
+|:--:|---|---|
+| 🎨 | **32 hand-picked shades** | Warm, green, blue, purple, pink & neutral |
+| 🖱️ | **One-click copy** | Click a swatch to copy the full Linux command |
+| 🌈 | **Custom color picker** | Choose any HEX color and generate an RGB command |
+| 🔎 | **Search & filters** | Find colors by name, group, HEX or alias |
+| ⌨️ | **Zsh shortcuts** | Type `kb-mint`, `kb-purple`, `kb-ice` and more |
+| 📴 | **Offline by design** | Open `index.html` directly; no packages or build step |
+| 💾 | **No firmware save** | RGB changes are requested for the current session only |
+
+## 🚀 Quick start
+
+**Option A — use the website**
+
+### [🌐 Open the interactive palette](https://fatemeh-mohseni-ai.github.io/tuf-rgb-palette/)
+
+Pick a color → click to copy → paste into your terminal. That's it.
+
+**Option B — run it completely offline**
 
 ```bash
 git clone https://github.com/fatemeh-mohseni-AI/tuf-rgb-palette.git
@@ -26,86 +62,116 @@ cd tuf-rgb-palette
 xdg-open index.html
 ```
 
-Some browsers restrict the Clipboard API when opening a `file://` URL. The app also tries a local-browser fallback and, if copying is unavailable, displays selectable text for manual copy.
+The page uses plain HTML, CSS and JavaScript; no external images, scripts, fonts, trackers or network requests are needed to use the color picker. If a browser blocks automatic copying from a local `file://` page, the app provides a manual copy fallback.
 
-### Example terminal command
+### 🐚 Optional: install the Zsh shortcuts
 
-```bash
-# Mint: temporary static RGB (0, 211, 184)
-printf '0 0 0 211 184 0\n' | sudo tee /sys/class/leds/asus::kbd_backlight/kbd_rgb_mode
-```
-
-For the interface format, six values mean `command mode red green blue speed`:
-
-| Value | Example | Meaning |
-| --- | --- | --- |
-| `command` | `0` | Apply temporarily (`1` asks firmware to save; **not used here**) |
-| `mode` | `0` | Static color |
-| `red`, `green`, `blue` | `0 211 184` | RGB color channels, each 0–255 |
-| `speed` | `0` | Ignored for static color |
-
-The command uses `sudo tee` to write to sysfs. Linux may prompt for your administrator password. Depending on your laptop firmware, temporary colors may reset at reboot or after power-state changes.
-
-## 🐚 Optional: Zsh aliases
-
-Source the helper file in your current Zsh session:
+Clone the repository **inside your home directory**, then add its helper script to Zsh:
 
 ```zsh
-source /absolute/path/to/tuf-rgb-palette/keyboard-colors.zsh
-kb-mint
-kb-purple
-kb-ice
-kb-warmwhite
+cd "$HOME"
+git clone https://github.com/fatemeh-mohseni-AI/tuf-rgb-palette.git
+echo 'source "$HOME/tuf-rgb-palette/keyboard-colors.zsh"' >> ~/.zshrc
+source ~/.zshrc
 ```
 
-To load aliases automatically in new Zsh terminals, add one `source` line to your `~/.zshrc` (replace the path with the actual location):
+Now use any of the aliases:
 
 ```zsh
-source "$HOME/path/to/tuf-rgb-palette/keyboard-colors.zsh"
+kb-mint        # fresh teal-green
+kb-purple      # violet glow
+kb-ice         # icy blue
+kb-rose        # rosy pink
+kb-warmwhite   # warm white
+kb-off         # request static black (0, 0, 0)
 ```
 
-To set any custom RGB color without an alias:
+Or pick any custom RGB combination (0–255 per channel):
 
 ```zsh
 kbd_rgb 0 211 184
 ```
 
-The helper validates values and checks that the kernel interface exists before attempting the write.
+> Already cloned elsewhere? Edit the `source` path in `~/.zshrc` to point to your actual copy of `keyboard-colors.zsh`. Add the line only once.
 
-## 🎨 Included aliases
+## 🎨 Color collection
+
+Here are a few favorites from the **32 built-in presets**:
+
+| Shade | HEX | Zsh command | Mood |
+|---|---|---|---|
+| 🟢 Mint | `#00D3B8` | `kb-mint` | Cool & fresh |
+| 🟣 Purple | `#A032FF` | `kb-purple` | Dreamy |
+| 🔵 Sky | `#50A0FF` | `kb-sky` | Soft blue |
+| 🩵 Ice | `#A0DCFF` | `kb-ice` | Frosted |
+| 🩷 Rose | `#FF4682` | `kb-rose` | Warm pink |
+| 🟠 Amber | `#FFBF00` | `kb-amber` | Golden hour |
+| 🟢 Emerald | `#00C878` | `kb-emerald` | Bright green |
+| ⚪ Warm White | `#FFE0B9` | `kb-warmwhite` | Cozy desk |
+
+<details>
+<summary><strong>See all 32 Zsh aliases</strong></summary>
 
 | Family | Aliases |
-| --- | --- |
-| Warm | `kb-red`, `kb-crimson`, `kb-coral`, `kb-orange`, `kb-amber`, `kb-gold`, `kb-yellow` |
-| Green | `kb-lime`, `kb-green`, `kb-emerald`, `kb-mint`, `kb-teal`, `kb-turquoise` |
-| Blue | `kb-cyan`, `kb-ice`, `kb-sky`, `kb-blue`, `kb-royal`, `kb-navy` |
-| Purple | `kb-lavender`, `kb-purple`, `kb-violet`, `kb-magenta`, `kb-fuchsia` |
-| Pink | `kb-pink`, `kb-hotpink`, `kb-rose`, `kb-peach` |
-| Neutral | `kb-white`, `kb-warmwhite`, `kb-cream`, `kb-off` |
+|---|---|
+| 🔴 **Warm** | `kb-red` · `kb-crimson` · `kb-coral` · `kb-orange` · `kb-amber` · `kb-gold` · `kb-yellow` |
+| 🟢 **Green** | `kb-lime` · `kb-green` · `kb-emerald` · `kb-mint` · `kb-teal` · `kb-turquoise` |
+| 🔵 **Blue** | `kb-cyan` · `kb-ice` · `kb-sky` · `kb-blue` · `kb-royal` · `kb-navy` |
+| 🟣 **Purple** | `kb-lavender` · `kb-purple` · `kb-violet` · `kb-magenta` · `kb-fuchsia` |
+| 🩷 **Pink** | `kb-pink` · `kb-hotpink` · `kb-rose` · `kb-peach` |
+| ⚪ **Neutral** | `kb-white` · `kb-warmwhite` · `kb-cream` · `kb-off` |
 
-> `kb-off` requests static RGB `(0,0,0)`. Whether that looks fully off varies with hardware.
+</details>
 
-## ✅ Compatibility check
+Actual LED colors may look different from a monitor swatch. `kb-off` sends RGB (0, 0, 0); the visual result depends on the keyboard firmware.
+
+## 🛠️ How it works
+
+If your laptop has the supported interface, the website generates a command like this:
+
+```bash
+# Mint / static RGB / temporary (not stored in firmware)
+printf '0 0 0 211 184 0\n' | sudo tee /sys/class/leds/asus::kbd_backlight/kbd_rgb_mode
+```
+
+The six values are `command mode red green blue speed`:
+
+| Part | Value | Purpose |
+|---|---|---|
+| Command | `0` | Apply temporarily; don't ask firmware to save |
+| Mode | `0` | Static color |
+| RGB | `0 211 184` | Red, green and blue (0–255) |
+| Speed | `0` | Not relevant for static mode |
+
+The color may reset after restarting, sleeping, or changing power states, depending on your hardware. `sudo` may prompt for your password when writing to the sysfs interface.
+
+### ✅ Check compatibility
 
 ```bash
 uname -r
 ls /sys/class/leds/asus::kbd_backlight/kbd_rgb_mode
 ```
 
-If the path is missing, this approach will not work as-is. Avoid writing arbitrary values to other sysfs device paths.
+If that path is missing, this project won't work as-is: it does **not** install or modify kernel drivers. Do not substitute unverified sysfs paths or arbitrary values.
 
-## 🌐 Publish on GitHub Pages
+## 📁 Project structure
 
-For a public repository, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/ (root)`. GitHub will publish the static `index.html` at:
+```text
+tuf-rgb-palette/
+├── assets/
+│   └── hero.svg            # README banner
+├── index.html              # Offline-friendly interactive palette
+├── keyboard-colors.zsh     # 32 aliases + custom RGB function
+├── README.md               # This guide
+└── LICENSE                 # MIT
+```
 
-`https://fatemeh-mohseni-ai.github.io/tuf-rgb-palette/`
+## 🤝 Contributing
 
-That address will work **after** GitHub Pages is enabled and its deployment completes. Locally opening `index.html` continues to work without GitHub Pages or internet access.
+Have another compatible ASUS model, a favorite RGB shade, or a UI improvement? Issues and pull requests are welcome. If you add or edit presets, please keep the colors in `index.html` and `keyboard-colors.zsh` in sync.
 
-## 🔧 Tech
+## 📄 License
 
-Vanilla HTML, CSS and JavaScript — no bundler, packages, server, external images or web fonts. Source is simple enough to modify. The colors in `index.html` and `keyboard-colors.zsh` should be kept in sync when extending the palette.
+[MIT](LICENSE) · Built with 💜 for Linux & colorful keyboards.
 
-## License
-
-MIT — see [LICENSE](LICENSE).
+<p align="center"><a href="https://fatemeh-mohseni-ai.github.io/tuf-rgb-palette/"><strong>🌈 Open the palette and find your glow</strong></a></p>
