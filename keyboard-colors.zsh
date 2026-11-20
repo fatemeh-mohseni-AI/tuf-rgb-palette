@@ -77,3 +77,27 @@ alias kb-off='kbd_rgb 0 0 0'
 # Example: kb-mint
 # Any custom color: kbd_rgb 0 211 184
 # 'kb-off' sets static RGB to 0,0,0; hardware may handle darkness differently.
+
+# ------------------------------------------
+# Animated effects — run with sudo, Ctrl+C to stop
+# These scripts use temporary writes only.
+# Resolve the script location when this Zsh file is sourced.
+typeset -g _TUF_RGB_PALETTE_DIR="${${(%):-%x}:A:h}"
+
+kbd_fx() {
+  local effect_script="${_TUF_RGB_PALETTE_DIR}/scripts/rgb_effects.py"
+  if [[ ! -f "$effect_script" ]]; then
+    print -u2 "RGB effects script not found: $effect_script"
+    return 1
+  fi
+  command sudo python3 "$effect_script" "$@"
+}
+
+# Use e.g. kb-fx-warm, kb-fx-pastel, kb-fx-rainbow
+# Or: kbd_fx heartbeat --color '#FFB48C' --cycles 3
+alias kb-fx-warm='kbd_fx warm'
+alias kb-fx-pastel='kbd_fx pastel'
+alias kb-fx-rainbow='kbd_fx rainbow'
+alias kb-fx-sunset='kbd_fx sunset'
+alias kb-fx-breathing='kbd_fx breathing'
+alias kb-fx-heartbeat='kbd_fx heartbeat'
