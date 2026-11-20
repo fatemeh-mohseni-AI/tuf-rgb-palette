@@ -6,7 +6,7 @@
 
 <p align="center">
   A tiny, beautiful, offline-friendly RGB color picker for ASUS TUF keyboards on Linux.<br />
-  <strong>32 colors · Custom HEX picker · Zsh aliases · No dependencies · No firmware saving</strong>
+  <strong>32 colors · 6 animated effects · Peach favorite 🍑 · Zsh aliases · No firmware saving</strong>
 </p>
 
 <p align="center">
@@ -21,6 +21,8 @@
   <a href="#-quick-start"><strong>⚡ Quick start</strong></a>
   &nbsp;·&nbsp;
   <a href="#-color-collection"><strong>🎨 Browse colors</strong></a>
+  &nbsp;·&nbsp;
+  <a href="#-animated-effects"><strong>✨ Animated effects</strong></a>
 </p>
 
 ---
@@ -34,6 +36,10 @@ Built around an **ASUS TUF Gaming F15 FX507ZM** running **Ubuntu 22.04 with Linu
 > [!IMPORTANT]
 > The website **only copies commands to your clipboard**; it cannot directly control your keyboard. Run the copied command on a compatible Linux machine. Every provided command uses the **temporary** setting, not the firmware-save setting.
 
+## 🍑 Creator’s favorite: Peach
+
+**Peach (`#FFB48C`)** is the creator’s favorite color. It is highlighted in the web palette, selected by default, and used for both the Breathing and Heartbeat effects. Type `kb-peach` for a static Peach glow.
+
 ## ✨ Highlights
 
 | | Feature | What it does |
@@ -42,7 +48,8 @@ Built around an **ASUS TUF Gaming F15 FX507ZM** running **Ubuntu 22.04 with Linu
 | 🖱️ | **One-click copy** | Click a swatch to copy the full Linux command |
 | 🌈 | **Custom color picker** | Choose any HEX color and generate an RGB command |
 | 🔎 | **Search & filters** | Find colors by name, group, HEX or alias |
-| ⌨️ | **Zsh shortcuts** | Type `kb-mint`, `kb-purple`, `kb-ice` and more |
+| ⌨️ | **Zsh shortcuts** | Type `kb-peach`, `kb-mint`, `kb-ice` and more |
+| ✨ | **Six animated effects** | Warm, Pastel, Rainbow, Sunset, Breathing and Heartbeat |
 | 📴 | **Offline by design** | Open `index.html` directly; no packages or build step |
 | 💾 | **No firmware save** | RGB changes are requested for the current session only |
 
@@ -78,6 +85,7 @@ source ~/.zshrc
 Now use any of the aliases:
 
 ```zsh
+kb-peach       # creator’s favorite 🍑
 kb-mint        # fresh teal-green
 kb-purple      # violet glow
 kb-ice         # icy blue
@@ -94,12 +102,76 @@ kbd_rgb 0 211 184
 
 > Already cloned elsewhere? Edit the `source` path in `~/.zshrc` to point to your actual copy of `keyboard-colors.zsh`. Add the line only once.
 
+## ✨ Animated effects
+
+Six **single-zone** animations run locally through Python 3's standard library (no Python packages to install). Each frame updates the **whole keyboard to one color**; this hardware cannot draw per-key shapes.
+
+| Effect | Mood | Command (after loading Zsh aliases) |
+|---|---|---|
+| ☀️ **Warm Tones** | Peach → coral → amber → honey → rose | `kb-fx-warm` |
+| 🫧 **Soft Pastels** | Blush → lavender → powder blue → mint → buttercream | `kb-fx-pastel` |
+| 🌈 **Rainbow** | A full spectrum of smoothly changing colors | `kb-fx-rainbow` |
+| 🌇 **Sunset** | Golden peach → coral → pink → violet | `kb-fx-sunset` |
+| 🍑 **Peach Breathing** | Peach softly brightens and dims | `kb-fx-breathing` |
+| 💓 **Peach Heartbeat** | Two short pulses followed by a pause | `kb-fx-heartbeat` |
+
+### Run an animation
+
+From **inside the cloned repository**, choose an effect:
+
+```bash
+sudo python3 scripts/rgb_effects.py warm
+sudo python3 scripts/rgb_effects.py pastel
+sudo python3 scripts/rgb_effects.py rainbow
+```
+
+Or, if you sourced `keyboard-colors.zsh`, use the convenient Zsh aliases:
+
+```zsh
+kb-fx-warm
+kb-fx-pastel
+kb-fx-rainbow
+kb-fx-sunset
+kb-fx-breathing
+kb-fx-heartbeat
+```
+
+**Stop with `Ctrl+C`**. The last color stays in place until changed or reset by the system. This does not modify firmware settings, does not start automatically, and makes no background service.
+
+Try running an effect for a limited number of loops:
+
+```bash
+sudo python3 scripts/rgb_effects.py pastel --cycles 2
+```
+
+Tune update speed (larger interval = slower and fewer hardware writes):
+
+```bash
+sudo python3 scripts/rgb_effects.py rainbow --interval 0.5
+```
+
+Make Heartbeat pulse in a different color (defaults to Peach):
+
+```bash
+sudo python3 scripts/rgb_effects.py heartbeat --color '#FFB48C'
+```
+
+Preview the exact write commands without `sudo` or an ASUS laptop:
+
+```bash
+python3 scripts/rgb_effects.py warm --dry-run --cycles 1
+```
+
+> [!NOTE]
+> The website's Effects cards copy the command, **not** the animation itself. You must clone the repository to run Python effects on your laptop. If your keyboard updates slowly or appears to skip frames, try `--interval 0.5` or higher. Avoid running multiple effects at once; they would compete for the same sysfs device.
+
 ## 🎨 Color collection
 
 Here are a few favorites from the **32 built-in presets**:
 
 | Shade | HEX | Zsh command | Mood |
 |---|---|---|---|
+| 🍑 **Peach ★** | `#FFB48C` | `kb-peach` | **Creator’s favorite** |
 | 🟢 Mint | `#00D3B8` | `kb-mint` | Cool & fresh |
 | 🟣 Purple | `#A032FF` | `kb-purple` | Dreamy |
 | 🔵 Sky | `#50A0FF` | `kb-sky` | Soft blue |
@@ -143,7 +215,7 @@ The six values are `command mode red green blue speed`:
 | RGB | `0 211 184` | Red, green and blue (0–255) |
 | Speed | `0` | Not relevant for static mode |
 
-The color may reset after restarting, sleeping, or changing power states, depending on your hardware. `sudo` may prompt for your password when writing to the sysfs interface.
+The color may reset after restarting, sleeping, or changing power states, depending on your hardware. Animated effects use repeated writes to the same temporary interface; they are software-controlled and stop when the Python process exits. `sudo` may prompt for your password when writing to the sysfs interface.
 
 ### ✅ Check compatibility
 
@@ -161,10 +233,24 @@ tuf-rgb-palette/
 ├── assets/
 │   └── hero.svg            # README banner
 ├── index.html              # Offline-friendly interactive palette
-├── keyboard-colors.zsh     # 32 aliases + custom RGB function
+├── keyboard-colors.zsh     # 32 colors + 6 effect shortcuts
+├── scripts/
+│   └── rgb_effects.py      # Temporary, single-zone RGB effects
+├── tests/
+│   └── test_rgb_effects.py # Hardware-free Python tests
 ├── README.md               # This guide
 └── LICENSE                 # MIT
 ```
+
+## 🧪 Tests
+
+Run the built-in tests without any ASUS hardware or administrator permissions:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+These tests check RGB ranges, command format (temporary mode only), animation frames and dry-run behavior.
 
 ## 🤝 Contributing
 
